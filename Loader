@@ -1,0 +1,5 @@
+local loader = "LOLKFCMONKEYLOLLLLLLXXDDXDDXXXXDXDXDXDXDXXDXDXXDDDDDXXXDXDXDXDSONTHEMXDXDXDXDXDXDXDXXDXDDXDXDXDXXDDXXDXDDXDX"
+if game.PlaceId == 2788229376 then
+loadstring(game:HttpGet('https://raw.githubusercontent.com/SuxOngW/Moonside/main/Da%20Hood'))()
+end
+print(loader)

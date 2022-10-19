@@ -1,0 +1,245 @@
+--// Moonside Free //--
+--// Skid all you want! // --
+local OrionLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/shlexware/Orion/main/source')))()
+if game.PlaceId == 2788229376 then
+local gname = "Cant Detect Game"
+local gid = game.PlaceId
+local playername = game.Players.LocalPlayer.Name
+if gid == 2788229376 then
+gname = "Da Hood"
+end
+OrionLib:MakeNotification({
+	Name = "Moonside",
+	Content = "Logged in as "..playername,
+	Time = 5
+})
+OrionLib:MakeNotification({
+	Name = "Moonside",
+	Content = "Version: v0.6",
+	Time = 5
+})
+local remotes = {
+    "CHECKER_1",
+    "CHECKER_2",
+    "TeleportDetect",
+    "OneMoreTime",
+    "BreathingHAMON",
+    "VirusCough",
+}
+local __namecall
+__namecall = hookmetamethod(game, "__namecall", function(...)
+    local args = {...}
+    local method = getnamecallmethod()
+    if (method == "FireServer" and args[1].Name == "MainEvent" and table.find(remotes, args[2])) then
+        return
+    end
+    return __namecall(table.unpack(args))
+end)
+local Window = OrionLib:MakeWindow({Name = "Moonside | "..gname, HidePremium = true, SaveConfig = true, ConfigFolder = "Moonside Config", IntroText = "Moonside Free"})
+local Scripts = Window:MakeTab({
+	Name = "Scripts",
+	PremiumOnly = false
+})
+local Aimlocks = Window:MakeTab({
+	Name = "Aimlocks",
+	PremiumOnly = false
+})
+local Anims = Window:MakeTab({
+	Name = "Animations",
+	PremiumOnly = false
+})
+local Credits = Window:MakeTab({
+	Name = "Credits",
+	PremiumOnly = false
+})
+Scripts:AddButton({
+	Name = "Faded",
+	Callback = function()
+      	_G.Toggles = "V" 
+loadstring(game:HttpGet("https://raw.githubusercontent.com/NighterEpic/Faded/main/YesEpic", true))()
+  	end    
+})
+Scripts:AddButton({
+	Name = "RayX",
+	Callback = function()
+      loadstring(game:HttpGet('https://raw.githubusercontent.com/SpaceYes/Lua/Main/DaHood.Lua'))()	
+  	end    
+})
+Scripts:AddButton({
+	Name = "Swagmode",
+	Callback = function()
+loadstring(game:HttpGet('https://raw.githubusercontent.com/lerkermer/lua-projects/master/SwagModeV002'))()
+  	end    
+})
+Aimlocks:AddButton({
+	Name = "Thusky (C)",
+	Callback = function()
+
+--[[
+████████ ██   ██ ██    ██ ███████ ██   ██ ██    ██ 
+   ██    ██   ██ ██    ██ ██      ██  ██   ██  ██  
+   ██    ███████ ██    ██ ███████ █████     ████   
+   ██    ██   ██ ██    ██      ██ ██  ██     ██    
+   ██    ██   ██  ██████  ███████ ██   ██    ██                                               
+]]
+local Settings = {
+    AimLock = {
+        Enabled = true,
+        Aimlockkey = "c",
+        Prediction = 0.135,
+        Aimpart = 'HumanoidRootPart',
+        Notifications = false
+    },
+    Settings = {
+        Thickness = 3.5,
+        Transparency = 1,
+        Color = Color3.fromRGB(153, 50, 204),
+        FOV = true
+    }
+
+}
+
+local CurrentCamera = game:GetService("Workspace").CurrentCamera
+local Inset = game:GetService("GuiService"):GetGuiInset().Y
+local RunService = game:GetService("RunService")
+
+local Mouse = game.Players.LocalPlayer:GetMouse()
+local LocalPlayer = game.Players.LocalPlayer
+
+local Line = Drawing.new("Line")
+local Circle = Drawing.new("Circle")
+
+local Plr
+
+Mouse.KeyDown:Connect(function(KeyPressed)
+    if KeyPressed == (Settings.AimLock.Aimlockkey) then
+        if Settings.AimLock.Enabled == true then
+            Settings.AimLock.Enabled = false
+            if Settings.AimLock.Notifications == true then
+                Plr = FindClosestPlayer()
+                game.StarterGui:SetCore("SendNotification", {
+                    Title = "Private",
+                    Text = "Unlocked"
+                })
+            end
+        else
+            Plr = FindClosestPlayer()
+            Settings.AimLock.Enabled = true
+            if Settings.AimLock.Notifications == true then
+                game.StarterGui:SetCore("SendNotification", {
+                    Title = "Private",
+                    Text = "Locked On :  " .. tostring(Plr.Character.Humanoid.DisplayName)
+                })
+            end
+        end
+    end
+end)
+
+function FindClosestPlayer()
+    local ClosestDistance, ClosestPlayer = math.huge, nil;
+    for _, Player in next, game:GetService("Players"):GetPlayers() do
+        local ISNTKNOCKED = Player.Character:WaitForChild("BodyEffects")["K.O"].Value ~= true
+        local ISNTGRABBED = Player.Character:FindFirstChild("GRABBING_COINSTRAINT") == nil
+
+        if Player ~= LocalPlayer then
+            local Character = Player.Character
+            if Character and Character.Humanoid.Health > 1 and ISNTKNOCKED and ISNTGRABBED then
+                local Position, IsVisibleOnViewPort = CurrentCamera:WorldToViewportPoint(Character.HumanoidRootPart
+                                                                                             .Position)
+                if IsVisibleOnViewPort then
+                    local Distance = (Vector2.new(Mouse.X, Mouse.Y) - Vector2.new(Position.X, Position.Y)).Magnitude
+                    if Distance < ClosestDistance then
+                        ClosestPlayer = Player
+                        ClosestDistance = Distance
+                    end
+                end
+            end
+        end
+    end
+    return ClosestPlayer, ClosestDistance
+end
+
+RunService.Heartbeat:connect(function()
+    if Settings.AimLock.Enabled == true then
+        local Vector = CurrentCamera:WorldToViewportPoint(Plr.Character[Settings.AimLock.Aimpart].Position +
+                                                              (Plr.Character[Settings.AimLock.Aimpart].Velocity *
+                                                              Settings.AimLock.Prediction))
+        Line.Color = Settings.Settings.Color
+        Line.Transparency = Settings.Settings .Transparency
+        Line.Thickness = Settings.Settings .Thickness
+        Line.From = Vector2.new(Mouse.X, Mouse.Y + Inset)
+        Line.To = Vector2.new(Vector.X, Vector.Y)
+        Line.Visible = true
+        Circle.Position = Vector2.new(Mouse.X, Mouse.Y + Inset)
+        Circle.Visible = Settings.Settings.FOV
+        Circle.Thickness = 1.5
+        Circle.Thickness = 2
+        Circle.Radius = 60
+        Circle.Color = Settings.Settings.Color
+    elseif Settings.AimLock.FOV == true then
+        Circle.Visible = true
+    else
+        Circle.Visible = false
+        Line.Visible = false
+    end
+end)
+
+local mt = getrawmetatable(game)
+local old = mt.__namecall
+setreadonly(mt, false)
+mt.__namecall = newcclosure(function(...)
+    local args = {...}
+    if Settings.AimLock.Enabled and getnamecallmethod() == "FireServer" and args[2] == "UpdateMousePos" then
+        args[3] = Plr.Character[Settings.AimLock.Aimpart].Position +
+                      (Plr.Character[Settings.AimLock.Aimpart].Velocity * Settings.AimLock.Prediction)
+
+        return old(unpack(args))
+    end
+    return old(...)
+end)
+
+  	end    
+})
+--
+Anims:AddButton({
+	Name = "Tryhard",
+	Callback = function()
+function Animation(Character)
+    Character:WaitForChild'Animate'
+    game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = true
+    for i, player in ipairs(game.Players:GetChildren()) do
+        local Animate = game.Players.LocalPlayer.Character.Animate
+        Animate.walk.WalkAnim.AnimationId = "http://www.roblox.com/asset/?id=616168032"
+        Animate.run.RunAnim.AnimationId = "http://www.roblox.com/asset/?id=616163682"
+        Animate.jump.JumpAnim.AnimationId = "http://www.roblox.com/asset/?id=1083218792"
+        Animate.climb.ClimbAnim.AnimationId = "http://www.roblox.com/asset/?id=1083439238"
+        Animate.fall.FallAnim.AnimationId = "http://www.roblox.com/asset/?id=707829716"
+        Animate.swim.Swim.AnimationId = "http://www.roblox.com/asset/?id=616165109"
+        Animate.swimidle.SwimIdle.AnimationId = "http://www.roblox.com/asset/?id=616166655"
+        game.Players.LocalPlayer.Character.Humanoid.Jump = false
+    end
+    wait(1)
+    game.Players.LocalPlayer.Character.HumanoidRootPart.Anchored = false
+end
+Animation(game.Players.LocalPlayer.Character)
+game.Players.LocalPlayer.CharacterAdded:Connect(Animation)
+wait(1)
+game.Players.LocalPlayer.Character.Head:Destroy()
+OrionLib:MakeNotification({
+	Name = "Moonside",
+	Content = "Reseted so its fe",
+	Time = 5
+})
+  	end    
+})
+--
+Credits:AddLabel("Orion Ui:https://github.com/shlexware/Orion/blob/main/Documentation.md ")
+Credits:AddLabel("Scripts: Ryu")
+Credits:AddLabel("Scripted: Zux")
+else
+OrionLib:MakeNotification({
+	Name = "Moonside",
+	Content = "Not supported game",
+	Time = 5
+})
+end

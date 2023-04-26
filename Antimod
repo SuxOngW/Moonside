@@ -1,0 +1,24 @@
+local nono = {
+   93101606,
+   163721789,
+   8195210,
+   4395645475,
+   682226313,
+   2598041621,
+   29242182,
+   228204181,
+   2631544496,
+   1829554086,
+   2490313443,
+   752396154,
+   2395613299,
+   67689481,
+   1884202010,
+   352087139,
+   }
+   while true do
+   for _,player in ipairs(game.Players:GetPlayers()) do
+    if player.UserId == nono then
+    game.Players.LocalPlayer:Kick("Anti Da Hood Moderation: We have detected a moderator in your server! You have been auto-kicked.")
+   end
+   end
